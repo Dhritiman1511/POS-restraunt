@@ -3,7 +3,20 @@ require("dotenv").config();
 const config = Object.freeze({
   port: process.env.PORT || 3000,
   databaseURI: process.env.MONGODB_URI || "mongodb://localhost:27017/pos-db",
-  origin: process.env.ORIGIN || "http://localhost:5173",
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      process.env.ORIGIN,
+      "http://localhost:5173",
+    ];
+
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   nodeEnv: process.env.NODE_ENV || "development",
   accessTokenSecret: process.env.JWT_SECRET,
   razorpayKeyId: process.env.RAZORPAY_KEY_ID,

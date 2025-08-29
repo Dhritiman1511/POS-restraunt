@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: pos-backend
+    env: node
+    plan: free
+    buildCommand: cd POS-Backend && npm install
+    startCommand: cd POS-Backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        fromDatabase:
+          name: pos-mongodb
+          property: connectionString
